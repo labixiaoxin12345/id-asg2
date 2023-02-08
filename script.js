@@ -43,7 +43,7 @@ $(document).ready(function(){
             $("#user-submit").prop( "disabled", true);
             //clear our form using the form id and triggering it's reset feature
             $("#add-user-form").trigger("reset");
-            window.location.href = "/4. Member Page/create-sucess.html";
+            window.location.href = "/4. Member Page/create-success.html";
       }
           
     }
@@ -91,7 +91,7 @@ $(document).ready(function(){
                 <td>${response[i].Contact}</td>
                 <td>${response[i].BillingAdd}</td>
                 <td><a href='#' class='delete' data-id='${response[i]._id}'>Del</a></td>
-                <td><a href='#update-student-container' class='update' data-id='${response[i]._id}' data-name='${response[i].FirstName}' data-id='${response[i].LastName}' data-mentor='${response[i].EmailAdd} data-class='${response[i].Contact} data-course='${response[i].BillingAdd} data-year='${response[i].Postal}'>Update</a></td></tr>`;
+                <td><a href='#update-user-container' class='update' data-FirstName='${response[i].FirstName}' data-LastName='${response[i].LastName}' data-EmailAdd='${response[i].EmailAdd}' data-Password='${response[i].Password}' data-Contact='${response[i].Contact} data-BillingAdd='${response[i].BillingAdd}'>Update</a></td></tr>`;
                 $("#user-list tbody").html(content);
   
                 $("#total-users").html(response.length);
@@ -147,7 +147,7 @@ $(document).ready(function(){
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url": "https://vhdla-26d3.restdb.io/rest/memberaccount/(ObjectID)",
+        "url": `https://interactivedev-adbb.restdb.io/rest/contact/${useremail}`,
         "method": "PUT",
         "headers": {
           "content-type": "application/json",
