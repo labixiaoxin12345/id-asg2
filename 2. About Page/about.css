@@ -1,0 +1,56 @@
+#title {
+    text-align: center;
+}
+.button-grp{
+    max-width:100%;
+    background-color: white; 
+}
+#belowheading{
+    width:10px;
+    background-color: black;
+}
+.bc-img{
+    display: block;
+    width: 25%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:auto;
+    border: 2px solid orange;
+}
+.thisbutton {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    width: 24%;
+    cursor: pointer;
+}  
+button:hover{
+    background-color:lightcoral;
+}
+
+.circle {
+    background: lightgrey;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin-left: 36%;  
+}
+
+.about-content{
+    margin-left: 20%;
+    font-size: 15px;
+    font-family: 'Dosis', sans-serif;
+    color:black;
+}
+
+#line{
+    background-color: red;
+    height: 5px;
+}
+
