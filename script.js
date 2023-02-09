@@ -1,12 +1,15 @@
 //Get our document ready
-$(document).ready(function(){
+$(document).ready(
+  function () {
     //Define API key in constant APIKEY
-    const APIKEY = "63d26f58a95709597409cfe7";
-    getUsers();
+    const APIKEY = "63e3ceff478852088da67ed7";
+    //getUsers();
     //$("success-msg").hide();
-    
+    $("#update-message-alert").hide();
+    console.log("script");
     //Create submit form listener
-    $("#user-submit").on("click", function(e){
+    $("#user-submit").on("click", function (e) {
+      //prevent default action of button
       e.preventDefault();
       //Retrieve data that user has keyed in
       let userfname = $("#user-fname").val();
@@ -16,52 +19,94 @@ $(document).ready(function(){
       let usercontact = $("#user-contact").val();
       let userbilling = $("#user-billing").val();
       console.log("Retrieved values!!");
+
       //get form values when submit is clicked
       let jsondata = {
-        "First Name": userfname,
-        "Last Name": userlname,
-        "Email Address": useremail,
-        "Password": userpassword, 
-        "Contact Number": usercontact,
-        "Billing Address": userbilling
-  
+        FirstName: userfname,
+        LastName: userlname,
+        EmailAddress: useremail,
+        Password: userpassword,
+        ContactNumber: usercontact,
+        BillingAddress: userbilling,
       };
-      let settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://vhdla-26d3.restdb.io/rest/memberaccount?max=2",
-        "method": "POST", //use POST to send info
-        "headers": {
+
+      var settings = {
+        async: true,
+        crossDomain: true,
+        url: "https://vhdla-26d3.restdb.io/rest/memberaccount",
+        method: "POST",
+        headers: {
           "content-type": "application/json",
           "x-apikey": APIKEY,
-          "cache-control": "no-cache"
-      },
-        "processData": false,
-        "data": JSON.stringify(jsondata),
-        "beforeSend": function(){
-            //disable button/show loading bar
-            $("#user-submit").prop( "disabled", true);
-            //clear our form using the form id and triggering it's reset feature
-            $("#add-user-form").trigger("reset");
-            window.location.href = "/4. Member Page/create-success.html";
-      }
-          
-    }
-        console.log("POST!!");
-        $.ajax(settings).done(function (response) {
-          console.log(response);
-          $("#user-submit").prop("disabled", false);
-  
-          $("#success-msg").show().fadeOut(3000);
-          //update user table
-          getUsers();
-        });
+          "cache-control": "no-cache",
+        },
+
+        processData: false,
+        data: JSON.stringify(jsondata),
+        beforeSend: function () {
+          //disable button/show loading bar
+          $("#user-submit").prop("disabled", true);
+          //clear our form using the form id and triggering it's reset feature
+          $("#add-user-form").trigger("reset");
+          console.log("POST!!");
+        },
+      };
+      //calls ajax
+      $.ajax(settings).done(function (response) {
+        console.log("done");
+        console.log(response);
+        
+        $("#user-submit").prop("disabled", false);
+        $("#success-msg").show().fadeOut(3000);
+      });
+      
     });
-    //create function to allow to retrieve all information
-    function getUsers(limit = 10, all = true) {
-  
-      //create AJAX settings
-      var settings = {
+
+    // //user login
+    // $("#user-login").on("click", function (e) {
+    //   //prevent default action of button
+    //   e.preventDefault();
+
+    //   let useremail = $("#user-email").val();
+    //   let userpassword = $("#user-password").val();
+
+    //   let jsondata = {
+    //     EmailAddress: useremail,
+    //     Password: userpassword,
+    //   };
+    //   console.log("in userlogin");
+    // var settings = {
+    //   "async": true,
+    //   "crossDomain": true,
+    //   "url": "https://vhdla-26d3.restdb.io/rest/memberaccount",
+    //   "method": "GET",
+    //   "headers": {
+    //     "content-type": "application/json",
+    //     "x-apikey": APIKEY,
+    //     "cache-control": "no-cache"
+    //   },
+    //   //processData: false,
+    //   data: JSON.stringify(jsondata)
+    // }
+
+    // $.ajax(settings).done(function (response2) {
+    //   console.log(response2);
+
+    //   if(response.indexOf("response") !== -1) {  
+    //   console.log("Yes, the value exists!"); 
+    //   $("#update-message-alert").show();
+
+    // }   
+    // else  {  
+    //   alert("You have keyed in the wrong credentials, please try again.");
+    //   console.log("No, the value is absent."); 
+    // }  
+
+    // });
+  //})
+
+  function getUsers(all = true){
+    var settings = {
         "async": true,
         "crossDomain": true,
         "url": "https://vhdla-26d3.restdb.io/rest/memberaccount",
@@ -70,103 +115,29 @@ $(document).ready(function(){
           "content-type": "application/json",
           "x-apikey": APIKEY,
           "cache-control": "no-cache"
-        }
-      }
-      
-      $.ajax(settings).done(function (response) {
-        console.log(response);
-      });
-          console.log("GET!!");
-  
-          //make AJAX calls
-          $.ajax(settings).done(function (response) {
-  
-            let content = "";
-  
-            for (var i = 0; i < response.length && 1 < limit; i++){
-                content = `${content}<tr id='${response[i]._id}'><td>${response[i].FirstName}</td>
-                <td>${response[i].LastName}</td>
-                <td>${response[i].EmailAdd}</td>
-                <td>${response[i].Password}</td>
-                <td>${response[i].Contact}</td>
-                <td>${response[i].BillingAdd}</td>
-                <td><a href='#' class='delete' data-id='${response[i]._id}'>Del</a></td>
-                <td><a href='#update-user-container' class='update' data-FirstName='${response[i].FirstName}' data-LastName='${response[i].LastName}' data-EmailAdd='${response[i].EmailAdd}' data-Password='${response[i].Password}' data-Contact='${response[i].Contact} data-BillingAdd='${response[i].BillingAdd}'>Update</a></td></tr>`;
-                $("#user-list tbody").html(content);
-  
-                $("#total-users").html(response.length);
-            }
-            //console.log(response);
-          });
-    }
-  
-    //create update listener
-    $("#user-submit").on("click", ".update", function(e){
-        e.preventDefault();
-  
-        //update data to form
-        let userfname = $(this).data("First Name");
-        let userlname = $(this).data("Last Name");
-        let useremail = $(this).data("Email Address");
-        let userpassword = $(this).data("Password");
-        let usercontact = $(this).data("Contact Number");
-        let userbilling = $(this).data("Billing Address");
-        console.log($(this).data("First Name"));
-  
-        $("#update-user-fname").val(userfname);
-        $("#update-user-lname").val(userlname);
-        $("#update-user-email").val(useremail);
-        $("#update-user-password").val(userpassword);
-        $("#update-user-contact").val(usercontact);
-        $("#update-user-billing").val(userbilling);
-        $("#update-user-container").show();
-        });
-        $("#update-contact-submit").on("click", function (e) {
-          e.preventDefault();
-          //retrieve all my update form values
-          let userfname = $("#update-user-fname").val();
-          let userlname = $("#update-user-lname").val();
-          let useremail = $("#update-user-email").val();
-          let userpassword = $("#update-user-password").val();
-          let usercontact = $("#update-user-contact").val();
-          let userbilling = $("#update-user-billing").val();
-  
-        updateForm(userfname, userlname, useremail, userpassword, usercontact, userbilling); 
-        });
-        function updateForm(userfname, userlname, useremail, userpassword, usercontact, userbilling){
-        var  jsondata = {
-          "First Name": userfname,
-          "Last Name": userlname,
-          "Email Address": useremail,
-          "Password": userpassword, 
-          "Contact Number": usercontact,
-          "Billing Address": userbilling
-        
-        };
-  
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": `https://interactivedev-adbb.restdb.io/rest/contact/${useremail}`,
-        "method": "PUT",
-        "headers": {
-          "content-type": "application/json",
-          "x-apikey": APIKEY,
-          "cache-control": "no-cache"
         },
-        "processData": false,
-        "data": JSON.stringify(jsondata)
+        //processData: false,
+        data: JSON.stringify(jsondata)
       }
-      console.log("PUT!!")
   
-      $.ajax(settings).done(function(response){
-        console.log(response);
-  
-        $("#update-user-container").fadeOut(5000);
-        //update table
-        getUsers();
-        });
-      }
+      $.ajax(settings).done(function (response2) {
+        console.log(response2);
+        
+        let credential = "";
+
+        for (var i = 0; i < response.length; i++){
+          credential = `${credential}`
+          if(response2.indexOf(credential) !== -1) {  
+              console.log("Yes, the value exists!"); 
+              $("#update-message-alert").show();
+        
+            }   
+            else  {  
+              alert("You have keyed in the wrong credentials, please try again.");
+              console.log("No, the value is absent."); 
+            }  
+        }
+
+  })
+  }
   });
-  
-  
